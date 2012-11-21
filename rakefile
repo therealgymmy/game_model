@@ -1,0 +1,91 @@
+require 'rake/clean'
+
+PROJECT_NAME = "game_model"
+AUTHOR       = "JC & Co"
+GITHUB       = "https://github.com/BeyondSora/game_model"
+
+CC = "gcc"
+STANDARD = " -Wall -Wextra"
+DEFINES = ""
+EXT_DEFINES = ""
+LIB= ""
+
+@CFLAGS = STANDARD + DEFINES + EXT_DEFINES
+
+PROG = "graph"
+SRC = FileList['src/**/*.c',
+               'test/**/*.c']
+OBJDIR = 'obj'
+OBJ = SRC.collect { |fn| File.join(OBJDIR, File.basename(fn).ext('o')) }
+
+CLEAN.include(OBJ, OBJDIR)
+CLOBBER.include(PROG)
+
+task :default => [:help]
+
+task :help do
+  puts
+  puts "info  -> display project related information"
+  puts "build -> build project for release"
+  puts "debug -> build a debug version of project"
+  puts "run   -> run executable normally"
+  puts "test  -> run executable with valgrind --leak-full=check"
+  puts
+end
+
+task :info do
+  puts
+  puts "Project: #{PROJECT_NAME}"
+  puts "Author:  #{AUTHOR}"
+  puts "LOC:     #{count_loc}"
+  puts "Github:  #{GITHUB}"
+  puts "Summary:"
+  puts "         Graph is a program which builds simple graphs as defined in"
+  puts "         graph theory of MATH239 at University of Waterloo. This means"
+  puts "         you can build a graph and query the program on the graph's"
+  puts "         connectivity, if it's isomorphic to another graph, or find a"
+  puts "         spanning tree, etc."
+  puts
+end
+
+task :build do
+  @CFLAGS += " -D_RELEASE"
+  Rake::Task[PROG].invoke
+end
+
+task :debug do
+  @CFLAGS += " -D_DEBUG"
+  Rake::Task[PROG].invoke
+end
+
+task :run => "build" do
+  sh "./#{PROG}"
+end
+
+task :test => "debug" do
+  sh "valgrind --leak-check=full ./#{PROG}"
+end
+
+file PROG => OBJ do
+  sh "#{CC} #{@CFLAGS} -o #{PROG} #{OBJ} #{LIB}"
+end
+
+directory OBJDIR
+
+rule '.o' => lambda{ |objfile| find_source(objfile) } do |t|
+  Task[OBJDIR].invoke
+  sh "#{CC} #{@CFLAGS} -c -o #{t.name} #{t.source}"
+end
+
+def find_source(objfile)
+  base = File.basename(objfile, '.o')
+  SRC.find { |s| File.basename(s, '.cpp') == base }
+end
+
+def count_loc
+  loc = 0
+  SRC.each { |f|
+    loc += File.foreach(f).inject(0) { |c, line| c + 1 }
+  }
+  return loc
+end
