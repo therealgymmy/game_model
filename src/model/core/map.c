@@ -109,7 +109,7 @@ bool incIdStore (IdStore *idStore)
 
     idStore->capacity_ = newCapacity;
     idStore->idList_   = newList;
-    return false;
+    return true;
 }
 
 bool newId (IdStore *idStore, uint32_t *id)
