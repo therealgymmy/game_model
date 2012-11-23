@@ -4,7 +4,12 @@
 #include <malloc.h>
 
 //---Prototypes---
+
 static bool initMap (Map *map, IdStack *stack);
+
+
+
+//---Implementations---
 
 Map* newMap (IdStack *stack)
 {
@@ -37,7 +42,7 @@ bool initMap (Map *map, IdStack *stack)
 {
     uint32_t id;
 
-    if (newId(stack) == NULL_ID) {
+    if ((id = newId(stack)) == NULL_ID) {
         return false;
     }
 
