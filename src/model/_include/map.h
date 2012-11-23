@@ -4,6 +4,7 @@
 // Dependencies
 #include <stdbool.h>
 #include <stdint.h>
+#include "identity.h"
 #include "player.h"
 
 //---Types---
@@ -26,17 +27,14 @@ typedef struct region_t {
 typedef struct map_t {
     uint32_t id_;
     uint32_t size_;
+    IdStack  *stack_;
     Region   *regions_;
 } Map;
 
 
 //---Functions---
 
-// Initialize all resources needed to use map.
-// Should be called first and only once before using any other function here.
-bool initMapProc ();
-
-Map* newMap ();
+Map* newMap (IdStack *stack);
 
 bool delMap (Map *map);
 

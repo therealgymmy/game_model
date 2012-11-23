@@ -12,7 +12,7 @@ LIB= ""
 
 @CFLAGS = STANDARD + DEFINES + EXT_DEFINES
 
-PROG = "graph"
+PROG = "model"
 SRC = FileList['src/**/*.c',
                'test/**/*.c']
 OBJDIR = 'obj'
@@ -79,7 +79,7 @@ end
 
 def find_source(objfile)
   base = File.basename(objfile, '.o')
-  SRC.find { |s| File.basename(s, '.cpp') == base }
+  SRC.find { |s| File.basename(s, '.c') == base }
 end
 
 def count_loc
