@@ -29,6 +29,9 @@ Map* newMap (IdStack *stack)
 bool delMap (Map *map)
 {
     if (map) {
+        if (map->size_ > 0) {
+            free(map->regions_);
+        }
         free(map);
     }
     else {
@@ -52,4 +55,8 @@ bool initMap (Map *map, IdStack *stack)
     map->regions_ = NULL;
 
     return true;
+}
+
+bool populateMap (Map *map, uint32_t size)
+{
 }

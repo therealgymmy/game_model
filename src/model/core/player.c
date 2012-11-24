@@ -37,10 +37,11 @@ bool delPlayer(Player *player) {
 bool initPlayer(Player* player, IdStack* idStack) {
     Identity id;
 
-    if (id = newID(idStack) == NULL_ID) {
+    if ((id = newId(idStack)) == NULL_ID) {
         return false;
     }
 
     player->id_ = id;
     player->regions_ = NULL;
+    return true;
 }

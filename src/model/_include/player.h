@@ -5,7 +5,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "identity.h"
-#include "map.h"
+
+typedef struct region_t Region;
 
 typedef struct player_t {
     uint32_t id_;
