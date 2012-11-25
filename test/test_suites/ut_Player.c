@@ -1,7 +1,9 @@
 #include "../_include/ut_Player.h"
 
 // Dependencies
-#include <stdio.h>
+#include "../_include/test_Log.h"
+
+// Required by test
 #include "../../src/model/_include/player.h"
 
 UnitTestPlayer ut_Player = {
@@ -19,104 +21,108 @@ bool isIdStackCreated = false;
 
 //---Prototypes---
 
-static bool singlePlayerTest();
-static bool doublePlayerTest();
+static TestStatus singlePlayerTest();
+static TestStatus doublePlayerTest();
 
 
 
 //---Implementations---
 //
 TestStatus run_player() {
+    __enter;
+
+    __checkpoint("IdStack initialization\n");
     if (!isIdStackCreated) {
         idStack = newIdStack();
         isIdStackCreated = true;
     }
 
     if (!singlePlayerTest()) {
-        printf("Failed singlePlayerTest first try\n");
-        return FAIL;
+        __return_status(FAIL);
     }
     if (!singlePlayerTest()) {
-        printf("Failed singlePlayerTest second try\n");
-        return FAIL;
+        __return_status(FAIL);
     }
 
     if (!doublePlayerTest()) {
-        printf("Failed doublePlayerTest first try\n");
-        return FAIL;
+        __return_status(FAIL);
     }
     if (!doublePlayerTest()) {
-        printf("Failed doublePlayerTest second try\n");
-        return FAIL;
+        __return_status(FAIL);
     }
 
+    __checkpoint("IdStack cleanup\n");
     if (isIdStackCreated) {
         delIdStack(idStack);
         isIdStackCreated = false;
     }
 
-    return PASS;
+    __return_status(PASS);
 }
 
-bool singlePlayerTest() {
+TestStatus singlePlayerTest() {
+    __enter;
+
     Player* p1 = newPlayer(idStack);
     if (!p1) {
-        printf("ERROR:  Function newPlayer() returned NULL pointer\n");
-        return false;
+        __log_print("ERROR:  Function newPlayer() returned NULL pointer\n");
+        __return_status(FAIL);
     }
     if (!delPlayer(p1)) {
-        printf("ERROR:  Function delPlayer() failed to free valid Player pointer\n");
-        return false;
+        __log_print("ERROR:  Function delPlayer() failed to free valid Player pointer\n");
+        __return_status(FAIL);
     }
     p1 = NULL;
 
     if (delPlayer(p1)) {
-        printf("ERROR:  Function delPlayer() attempted to free invalid Player pointer\n");
-        return false;
+        __log_print("ERROR:  Function delPlayer() attempted to free invalid Player pointer\n");
+        __return_status(FAIL);
     }
 
-    return true;
+    __return_status(PASS);
 }
 
-bool doublePlayerTest() {
+TestStatus doublePlayerTest() {
+    __enter;
+
     Player* p1 = NULL;
     Player* p2 = NULL;
 
     if (delPlayer(p1)) {
-        printf("ERROR:  Function delPlayer() attempted to free invalid Player pointer\n");
-        return false;
+        __log_print("ERROR:  Function delPlayer() attempted to free invalid Player pointer\n");
+        __return_status(FAIL);
     }
 
     p1 = newPlayer(idStack);
     if (!p1) {
-        printf("ERROR:  Function newPlayer() returned NULL pointer\n");
-        return false;
+        __log_print("ERROR:  Function newPlayer() returned NULL pointer\n");
+        __return_status(FAIL);
     }
     p2 = newPlayer(idStack);
     if (!p2) {
-        printf("ERROR:  Function newPlayer() returned NULL pointer\n");
-        return false;
+        __log_print("ERROR:  Function newPlayer() returned NULL pointer\n");
+        __return_status(FAIL);
     }
 
     if (!delPlayer(p1)) {
-        printf("ERROR:  Function delPlayer() failed to free valid Player pointer\n");
-        return false;
+        __log_print("ERROR:  Function delPlayer() failed to free valid Player pointer\n");
+        __return_status(FAIL);
     }
     p1 = NULL;
     if (delPlayer(p1)) {
-        printf("ERROR:  Function delPlayer() attempted to free invalid Player pointer\n");
-        return false;
+        __log_print("ERROR:  Function delPlayer() attempted to free invalid Player pointer\n");
+        __return_status(FAIL);
     }
 
     if (!delPlayer(p2)) {
-        printf("ERROR:  Function delPlayer() failed to free valid Player pointer\n");
-        return false;
+        __log_print("ERROR:  Function delPlayer() failed to free valid Player pointer\n");
+        __return_status(FAIL);
     }
     p2 = NULL;
     if (delPlayer(p2)) {
-        printf("ERROR:  Function delPlayer() attempted to free invalid Player pointer\n");
-        return false;
+        __log_print("ERROR:  Function delPlayer() attempted to free invalid Player pointer\n");
+        __return_status(FAIL);
     }
 
-    return true;
+    __return_status(PASS);
 }

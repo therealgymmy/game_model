@@ -30,7 +30,7 @@
                       } while (0)
 
 #define __return_status(arg) do {\
-                             testStatus (arg, TEST_NAME);\
+                             testStatus(arg, TEST_NAME);\
                              __return(arg);\
                              } while (0)
 
@@ -51,7 +51,7 @@
                               }\
                               } while (0)
 
-inline
+inline static
 void testStatus (TestStatus status, const char *testName)
 {
     switch (status) {
