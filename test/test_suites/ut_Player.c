@@ -2,7 +2,14 @@
 
 // Dependencies
 #include <stdio.h>
-#include "../../src/model/_include/Player.h"
+#include "../../src/model/_include/player.h"
+
+UnitTestPlayer ut_Player = {
+    .base_ = {
+        .type_ = UT_PLAYER,
+        .run_  = &run_player
+    }
+};
 
 static
 IdStack* idStack;
@@ -26,21 +33,26 @@ TestStatus run_player() {
     }
 
     if (!singlePlayerTest()) {
-        printf("Failed singlePlayerTest first try");
+        printf("Failed singlePlayerTest first try\n");
         return FAIL;
     }
     if (!singlePlayerTest()) {
-        printf("Failed singlePlayerTest second try");
+        printf("Failed singlePlayerTest second try\n");
         return FAIL;
     }
 
     if (!doublePlayerTest()) {
-        printf("Failed doublePlayerTest first try");
+        printf("Failed doublePlayerTest first try\n");
         return FAIL;
     }
     if (!doublePlayerTest()) {
-        printf("Failed doublePlayerTest second try");
+        printf("Failed doublePlayerTest second try\n");
         return FAIL;
+    }
+
+    if (isIdStackCreated) {
+        delIdStack(idStack);
+        isIdStackCreated = false;
     }
 
     return PASS;
@@ -62,6 +74,8 @@ bool singlePlayerTest() {
         printf("ERROR:  Function delPlayer() attempted to free invalid Player pointer\n");
         return false;
     }
+
+    return true;
 }
 
 bool doublePlayerTest() {
@@ -103,4 +117,6 @@ bool doublePlayerTest() {
         printf("ERROR:  Function delPlayer() attempted to free invalid Player pointer\n");
         return false;
     }
+
+    return true;
 }

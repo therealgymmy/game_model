@@ -1,5 +1,7 @@
 #ifdef _DEBUG
 
+#include "_include/test_Run.h"
+
 int main ()
 {
     runTest();
