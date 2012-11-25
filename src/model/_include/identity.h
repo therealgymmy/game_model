@@ -3,11 +3,12 @@
 
 // Dependencies
 #include <stdint.h>
+#include <stdbool.h>
 
 //---Macros---
 
 #define NULL_ID 0
-
+#define MAX_ID_STACK_ID_COUNT     (UINT32_MAX / 2)
 
 
 //---Types---
@@ -26,7 +27,7 @@ typedef struct idstore_t {
 //---Prototypes
 
 IdStack* newIdStack ();
-void     delIdStack (IdStack *stack);
+bool     delIdStack (IdStack *stack);
 Identity newId      (IdStack *stack);
 
 
