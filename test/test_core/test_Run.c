@@ -3,6 +3,7 @@
 // Dependencies
 #include <stdint.h>
 #include "../_include/test_Base.h"
+#include "../_include/test_Log.h"
 
 // Unit Tests
 #include "../_include/ut_Player.h"
@@ -19,7 +20,7 @@ void runTest ()
 {
     for (uint32_t i = 0; i < UnitTestsLength; ++i) {
         if (!UnitTests[i]->run_()) {
-            // Output info about this specific unit test.
+            __log_print("The %dth unit test failed.\n", i);
         }
     }
 }
