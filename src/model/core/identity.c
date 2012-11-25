@@ -2,12 +2,10 @@
 
 // Dependencies
 #include <malloc.h>
-#include <stdbool.h>
 
 //---Macro---
 #define DEFAULT_ID_STACK_SIZE     20
 #define DEFAULT_ID_STACK_ID_START 0
-#define MAX_ID_STACK_ID_COUNT     (UINT32_MAX / 2)
 
 
 
@@ -41,10 +39,17 @@ IdStack* newIdStack ()
     return stack;
 }
 
-void delIdStack (IdStack *stack)
+bool delIdStack (IdStack *stack)
 {
-    free(stack->idList_);
-    free(stack);
+    if (stack) {
+        if (stack->size_ > 0) {
+            free(stack->idList_);
+        }
+        free(stack);
+    } else {
+        return false;
+    }
+    return true;
 }
 
 Identity newId (IdStack *stack)
