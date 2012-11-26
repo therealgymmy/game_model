@@ -32,6 +32,7 @@ typedef struct map_t {
 } Map;
 
 
+
 //---Functions---
 
 Map* newMap (IdStack *stack);

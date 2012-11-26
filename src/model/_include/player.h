@@ -6,12 +6,18 @@
 #include <stdint.h>
 #include "identity.h"
 
+//---Types---
+
 typedef struct region_t Region;
 
 typedef struct player_t {
     uint32_t id_;
     Region **regions_;
 } Player;
+
+
+
+//---Functions---
 
 Player* newPlayer(IdStack* idStack);
 
