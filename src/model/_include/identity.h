@@ -8,7 +8,7 @@
 //---Macros---
 
 #define NULL_ID 0
-#define MAX_ID_STACK_ID_COUNT     (UINT32_MAX / 2)
+#define MAX_ID_STACK_ID_COUNT     (UINT32_MAX / 32)
 
 
 //---Types---

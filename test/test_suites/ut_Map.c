@@ -69,7 +69,7 @@ TestStatus singleMapTest() {
         __return_status(FAIL);
     }
 
-    if (!m1->regions_) {
+    if (!m1->regions_ && m1->size_ > 0) {
         __log_print("ERROR:  The regions_ pointer is NULL prior to deleting the map\n");
        __return_status(FAIL);
     }
@@ -130,7 +130,7 @@ TestStatus doubleMapTest() {
         __return_status(FAIL);
     }
 
-    if (!m2->regions_ & m2->size_ > 0) {
+    if (!m2->regions_ && m2->size_ > 0) {
         __log_print("ERROR:  The regions_ pointer is NULL when the size of the Map is greater than 0\n");
         __return_status(FAIL);
     }

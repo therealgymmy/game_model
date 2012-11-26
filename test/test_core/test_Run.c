@@ -6,11 +6,15 @@
 #include "../_include/test_Log.h"
 
 // Unit Tests
+#include "../_include/ut_IdStack.h"
 #include "../_include/ut_Player.h"
+#include "../_include/ut_Map.h"
 
 static
 UnitTestBase* UnitTests[] = {
-    (UnitTestBase*)&ut_Player
+    (UnitTestBase*)&ut_IdStack,
+    (UnitTestBase*)&ut_Player,
+    (UnitTestBase*)&ut_Map,
 };
 
 static const
