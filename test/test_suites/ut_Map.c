@@ -1,8 +1,9 @@
 #include "../_include/ut_Map.h"
 
 // Dependencies
-#include <stdio.h>
-#include <stdbool.h>
+#include "../_include/test_Log.h"
+
+// Required by test
 #include "../../src/model/_include/map.h"
 
 UnitTestMap ut_Map = {
@@ -20,122 +21,132 @@ bool isIdStackCreated = false;
 
 //---Prototypes---
 
-static bool singleMapTest();
-static bool doubleMapTest();
+static TestStatus singleMapTest();
+static TestStatus  doubleMapTest();
 
 
 
 //---Implementations---
 //
 TestStatus run_map() {
+    __enter;
+
+    __checkpoint("IdStack initialization\n");
     if (!isIdStackCreated) {
         idStack = newIdStack();
         isIdStackCreated = true;
     }
 
     if (!singleMapTest()) {
-        printf("Failed singleMapTest first try\n");
-        return FAIL;
+        __return_status(FAIL);
     }
     if (!singleMapTest()) {
-        printf("Failed singleMapTest second try\n");
-        return FAIL;
+        __return_status(FAIL);
     }
 
     if (!doubleMapTest()) {
-        printf("Failed doubleMapTest first try\n");
-        return FAIL;
+        __return_status(FAIL);
     }
     if (!doubleMapTest()) {
-        printf("Failed doubleMapTest second try\n");
-        return FAIL;
+        __return_status(FAIL);
     }
 
+    __checkpoint("IdStack cleanp\n");
     if (isIdStackCreated) {
         delIdStack(idStack);
         isIdStackCreated = false;
     }
 
-    return PASS;
+    __return_status(PASS);
 }
 
-bool singleMapTest() {
+TestStatus singleMapTest() {
+    __enter;
+
     Map* m1 = newMap(idStack);
     if (!m1) {
-        printf("ERROR:  Function newMap() returned NULL pointer\n");
-        return false;
+        __log_print("ERROR:  Function newMap() returned NULL pointer\n");
+        __return_status(FAIL);
     }
 
     if (!m1->regions_) {
-        printf("ERROR:  The regions_ pointer is NULL prior to deleting the map\n");
+        __log_print("ERROR:  The regions_ pointer is NULL prior to deleting the map\n");
+       __return_status(FAIL);
     }
     if (m1->regions_ && m1->size_ == 0) {
-        printf("ERROR:  The regions_ pointer is not NULL the size of the Map is 0\n");
+        __log_print("ERROR:  The regions_ pointer is not NULL the size of the Map is 0\n");
+        __return_status(FAIL);
     }
     if (!delMap(m1)) {
-        printf("ERROR:  Function delMap() failed to free valid Map pointer\n");
-        return false;
+        __log_print("ERROR:  Function delMap() failed to free valid Map pointer\n");
+        __return_status(FAIL);
     }
     m1 = NULL;
     if (delMap(m1)) {
-        printf("ERROR:  Function delMap() attempted to free invalid Map pointer\n");
-        return false;
+        __log_print("ERROR:  Function delMap() attempted to free invalid Map pointer\n");
+        __return_status(FAIL);
     }
 
-    return true;
+    __return_status(PASS);
 }
 
-bool doubleMapTest() {
+TestStatus doubleMapTest() {
+    __enter;
+
     Map* m1 = NULL;
     Map* m2 = NULL;
 
     if (delMap(m1)) {
-        printf("ERROR:  Function delMap() attempted to free invalid Map pointer\n");
-        return false;
+        __log_print("ERROR:  Function delMap() attempted to free invalid Map pointer\n");
+        __return_status(FAIL);
     }
 
     m1 = newMap(idStack);
     if (!m1) {
-        printf("ERROR:  Function newMap() returned NULL pointer\n");
-        return false;
+        __log_print("ERROR:  Function newMap() returned NULL pointer\n");
+        __return_status(FAIL);
     }
     m2 = newMap(idStack);
     if (!m2) {
-        printf("ERROR:  Function newMap() returned NULL pointer\n");
-        return false;
+        __log_print("ERROR:  Function newMap() returned NULL pointer\n");
+        __return_status(FAIL);
     }
 
     if (!m1->regions_ && m1->size_ > 0) {
-        printf("ERROR:  The regions_ pointer is NULL when the size of the Map is greater than 0\n");
+        __log_print("ERROR:  The regions_ pointer is NULL when the size of the Map is greater than 0\n");
+        __return_status(FAIL);
     }
     if (m1->regions_ && m1->size_ == 0) {
-        printf("ERROR:  The regions_ pointer is not NULL the size of the Map is 0\n");
+        __log_print("ERROR:  The regions_ pointer is not NULL the size of the Map is 0\n");
+        __return_status(FAIL);
     }
     if (!delMap(m1)) {
-        printf("ERROR:  Function delMap() failed to free valid Map pointer\n");
-        return false;
+        __log_print("ERROR:  Function delMap() failed to free valid Map pointer\n");
+        __return_status(FAIL);
     }
     m1 = NULL;
     if (delMap(m1)) {
-        printf("ERROR:  Function delMap() attempted to free invalid Map pointer\n");
-        return false;
+        __log_print("ERROR:  Function delMap() attempted to free invalid Map pointer\n");
+        __return_status(FAIL);
     }
 
     if (!m2->regions_ & m2->size_ > 0) {
-        printf("ERROR:  The regions_ pointer is NULL when the size of the Map is greater than 0\n");
+        __log_print("ERROR:  The regions_ pointer is NULL when the size of the Map is greater than 0\n");
+        __return_status(FAIL);
     }
     if (m2->regions_ && m2->size_ == 0) {
-        printf("ERROR:  The regions_ pointer is not NULL the size of the Map is 0\n");
+        __log_print("ERROR:  The regions_ pointer is not NULL the size of the Map is 0\n");
+        __return_status(FAIL);
     }
     if (!delMap(m2)) {
-        printf("ERROR:  Function delMap() failed to free valid Map pointer\n");
-        return false;
+        __log_print("ERROR:  Function delMap() failed to free valid Map pointer\n");
+        __return_status(FAIL);
     }
     m2 = NULL;
     if (delMap(m2)) {
-        printf("ERROR:  Function delMap() attempted to free invalid Map pointer\n");
-        return false;
+        __log_print("ERROR:  Function delMap() attempted to free invalid Map pointer\n");
+        __return_status(FAIL);
     }
 
-    return true;
+    __return_status(PASS);
 }
